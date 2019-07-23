@@ -4,6 +4,7 @@ lib/Net/Connection/Sort/host_f.pm
 lib/Net/Connection/Sort/host_fl.pm
 lib/Net/Connection/Sort/host_l.pm
 lib/Net/Connection/Sort/host_lf.pm
+lib/Net/Connection/Sort/proto.pm
 lib/Net/Connection/Sort/state.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -14,6 +15,7 @@ t/02-load.t
 t/03-load.t
 t/04-load.t
 t/05-load.t
+t/06-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
@@ -21,4 +23,5 @@ t/host_f.t
 t/host_fl.t
 t/host_l.t
 t/host_lf.t
+t/proto.t
 t/state.t

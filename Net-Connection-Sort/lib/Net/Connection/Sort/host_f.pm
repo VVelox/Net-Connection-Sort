@@ -3,10 +3,11 @@ package Net::Connection::Sort::host_f;
 use 5.006;
 use strict;
 use warnings;
+use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort - Sorts array of Net::Connection objects.
+Net::Connection::Sort::host_f - Sorts the connections via the foreign host.
 
 =head1 VERSION
 
@@ -21,8 +22,56 @@ our $VERSION = '0.0.0';
 
     use Net::Connection::Sort::host_f;
     use Net::Connection;
+    use Data::Dumper;
     
-    my $ncs=Net::Connection::Sort::host_f->new;
+     my @objects=(
+                  Net::Connection->new({
+                                        'foreign_host' => '3.3.3.3',
+                                        'local_host' => '4.4.4.4',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '1.1.1.1',
+                                        'local_host' => '2.2.2.2',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '5.5.5.5',
+                                        'local_host' => '6.6.6.6',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '3.3.3.3',
+                                        'local_host' => '4.4.4.4',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                 );
+    
+    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    
+    @objects=$sorter->sorter( \@objects );
+    
+    print Dumper( \@objects );
 
 =head1 METHODS
 
@@ -54,6 +103,10 @@ This sorts the array of Net::Connection objects.
 
 One object is taken and that is a array of objects.
 
+    @objects=$sorter->sorter( \@objects );
+    
+    print Dumper( \@objects );
+
 =cut
 
 sub sorter{
@@ -76,6 +129,8 @@ sub sorter{
 }
 
 =head2 helper
+
+This is a internal function.
 
 =cut
 

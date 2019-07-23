@@ -18,6 +18,7 @@ my %WriteMakefileArgs = (
 										   },
 						 PREREQ_PM => {
 									   'Net::Connection'=>'0.0.0',
+									   'Net::IP'=>'1.26',
 									   },
 						 dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 						 clean => { FILES => 'Net-Connection-Sort-*' },

@@ -22,6 +22,50 @@ our $VERSION = '0.0.0';
 
     use Net::Connection::Sort;
     use Net::Connection;
+    use Data::Dumper;
+    
+     my @objects=(
+                  Net::Connection->new({
+                                        'foreign_host' => '3.3.3.3',
+                                        'local_host' => '4.4.4.4',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '1.1.1.1',
+                                        'local_host' => '2.2.2.2',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '5.5.5.5',
+                                        'local_host' => '6.6.6.6',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                  Net::Connection->new({
+                                        'foreign_host' => '3.3.3.3',
+                                        'local_host' => '4.4.4.4',
+                                        'foreign_port' => '22',
+                                        'local_port' => '11132',
+                                        'sendq' => '1',
+                                        'recvq' => '0',
+                                        'state' => 'ESTABLISHED',
+                                        'proto' => 'tcp4'
+                                        }),
+                 );
     
     my $sort_args={
                   type=>'host_f',
@@ -30,12 +74,16 @@ our $VERSION = '0.0.0';
     
     my $mcs;
     eval{
-        $ncs=Net::Connection::Sort->new( $sort_args );
+        $mcs=Net::Connection::Sort->new( $sort_args );
     };
     
     if ( ! defined( $mcs ) ){
         print "Failed to init the sorter... ".$@;
     }
+    
+    my @sorted=$mcs->sorter( \@objects );
+    
+    print Dumper( \@sorted );
 
 =head1 METHODS
 
@@ -109,11 +157,15 @@ sub new{
 	return $self;
 }
 
-=head2 sort
+=head2 sorter
 
 This sorts the array of Net::Connection objects.
 
 One object is taken and that is a array of objects.
+
+    my @sorted=$mcs->sorter( \@objects );
+    
+    print Dumper( \@sorted );
 
 =cut
 

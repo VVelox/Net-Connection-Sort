@@ -1,9 +1,12 @@
 Changes
 lib/Net/Connection/Sort.pm
+lib/Net/Connection/Sort/host_f.pm
 Makefile.PL
 MANIFEST			This list of files
 README
 t/00-load.t
+t/01-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+t/host_f.t

@@ -3,50 +3,132 @@ package Net::Connection::Sort;
 use 5.006;
 use strict;
 use warnings;
+use base 'Error::Helper';
 
 =head1 NAME
 
-Net::Connection::Sort - The great new Net::Connection::Sort!
+Net::Connection::Sort - Sorts array of Net::Connection objects.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.0.0
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.0.0';
 
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use Net::Connection::Sort;
+    use Net::Connection;
+    
+    my $sort_args={
+                  type=>'host_f',
+                  invert=>0,
+                  };
+    
+    my $mcs;
+    eval{
+        $ncs=Net::Connection::Sort->new( $sort_args );
+    };
+    
+    if ( ! defined( $mcs ) ){
+        print "Failed to init the sorter... ".$@;
+    }
 
-    my $foo = Net::Connection::Sort->new();
-    ...
+=head1 METHODS
 
-=head1 EXPORT
+=head2 new
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+This initiates the module.
 
-=head1 SUBROUTINES/METHODS
+One argument is taken and that is a hash ref with two possible keys,
+'type' and 'invert'. If not passed or any of the keys are undef, then
+the defaults will be used.
 
-=head2 function1
+'type' is the module to use. It is relative to 'Net::Connection::Sort',
+so 'host_f' becomes 'Net::Connection::Sort::host_f'.
+
+    my $sort_args={
+                  type=>'host_f',
+                  invert=>0,
+                  };
+    
+    my $mcs;
+    eval{
+        $ncs=Net::Connection::Sort->new( $sort_args );
+    };
+    
+    if ( ! defined( $mcs ) ){
+        print "Failed to init the sorter... ".$@;
+    }
 
 =cut
 
-sub function1 {
+sub new{
+	my %args;
+	if(defined($_[1])){
+		%args= %{$_[1]};
+	};
+
+
+	my $self = {
+				perror=>undef,
+				error=>undef,
+				errorString=>"",
+				testing=>0,
+				errorExtra=>{
+							 flags=>{
+									 }
+							 },
+				type=>'host_f',
+				invert=>0,
+				sorter=>undef,,
+				};
+    bless $self;
+
+	# real in the args if needed
+	if (defined( $args{type} )){
+		$self->{type}=$args{type};
+	}
+	if (defined( $args{invert} )){
+		$self->{invert}=$args{invert};
+	}
+
+	# see of we amd reel in the module
+	my $to_eval='use Net::Connection::Sort::'.$self->{type}
+	.'; $self->{sorter}=Net::Connection::Sort::'.$self->{type}.'->new;';
+	eval( $to_eval ) or die('Failed to use or invoke Net::Connection::Sort::'.$self->{type}.'->new... '.$@);
+
+	# make sure we did get it
+	if (!defined( $self->{sorter} )){
+		die( 'Net::Connection::Sort::'.$self->{type}.'->new returned undef');
+	}
+
+	return $self;
 }
 
-=head2 function2
+=head2 sort
+
+This sorts the array of Net::Connection objects.
+
+One object is taken and that is a array of objects.
 
 =cut
 
-sub function2 {
+sub sorter{
+	my $self=$_[0];
+	my @objects;
+	if(defined($_[1])){
+		@objects= @{$_[1]};
+	};
+
+	if( ! $self->errorblank ){
+		return undef;
+	}
+
+	return $self->{sorter}->sorter( \@objects );
 }
 
 =head1 AUTHOR

@@ -1,4 +1,4 @@
-package Net::Connection::Sort::host_fl;
+package Net::Connection::Sort::host_lf;
 
 use 5.006;
 use strict;
@@ -7,7 +7,7 @@ use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort::host_fl - Sorts the connections via the foreign host and then local host.
+Net::Connection::Sort::host_lf - Sorts the connections via the local host and then foreign host.
 
 =head1 VERSION
 
@@ -26,7 +26,7 @@ our $VERSION = '0.0.0';
     
      my @objects=(
                   Net::Connection->new({
-                                        'foreign_host' => '3.3.3.3',
+                                        'foreign_host' => '3.3.3.4',
                                         'local_host' => '4.4.4.5',
                                         'foreign_port' => '22',
                                         'local_port' => '11132',
@@ -67,7 +67,7 @@ our $VERSION = '0.0.0';
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::host_fl->new;
+    my $sorter=$sorter=Net::Connection::Sort::host_lf->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -81,7 +81,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::host_fl->new;
+    my $sorter=$sorter=Net::Connection::Sort::host_lf->new;
 
 =cut
 
@@ -124,8 +124,8 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->{foreign_host} ) <=>  &helper( $b->{foreign_host} ) or
-		&helper( $a->{local_host} ) <=>  &helper( $b->{local_host} )
+		&helper( $a->{local_host} ) <=>  &helper( $b->{local_host} ) or
+		&helper( $a->{foreign_host} ) <=>  &helper( $b->{foreign_host} )
 	} @objects;
 
 	return @objects;

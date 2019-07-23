@@ -1,4 +1,4 @@
-package Net::Connection::Sort::host_f;
+package Net::Connection::Sort::state;
 
 use 5.006;
 use strict;
@@ -7,7 +7,7 @@ use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort::host_f - Sorts the connections via the foreign host.
+Net::Connection::Sort::state - Sorts the connections via the connection state.
 
 =head1 VERSION
 
@@ -20,7 +20,7 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-    use Net::Connection::Sort::host_f;
+    use Net::Connection::Sort::state;
     use Net::Connection;
     use Data::Dumper;
     
@@ -32,7 +32,7 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'LISTEN',
                                         'proto' => 'tcp4'
                                         }),
                   Net::Connection->new({
@@ -42,7 +42,7 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'FIN_WAIT_2',
                                         'proto' => 'tcp4'
                                         }),
                   Net::Connection->new({
@@ -52,7 +52,7 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'TIME_WAIT',
                                         'proto' => 'tcp4'
                                         }),
                   Net::Connection->new({
@@ -67,7 +67,7 @@ our $VERSION = '0.0.0';
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::state->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -81,7 +81,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::state->new;
 
 =cut
 
@@ -124,31 +124,10 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->foreign_host ) <=>  &helper( $b->foreign_host )
+		$a->state cmp $b->state
 	} @objects;
 
 	return @objects;
-}
-
-=head2 helper
-
-This is a internal function.
-
-=cut
-
-sub helper{
-        if (
-			( !defined($_[0]) ) ||
-			( $_[0] eq '*' ) ||
-			( $_[0] =~ /[g-zG-Z]/ )
-			){
-			return 0;
-        }
-        my $host=eval { Net::IP->new( $_[0] )->intip} ;
-        if (!defined( $host )){
-			return 0;
-        }
-        return $host;
 }
 
 =head1 AUTHOR

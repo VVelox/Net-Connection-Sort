@@ -13,7 +13,7 @@ my @objects=(
 								   'local_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
-								   'state' => 'ESTABLISHED',
+								   'state' => 'LISTEN',
 								   'proto' => 'tcp4'
 								  }),
 			 Net::Connection->new({
@@ -23,7 +23,7 @@ my @objects=(
 								   'local_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
-								   'state' => 'ESTABLISHED',
+								   'state' => 'FIN_WAIT_2',
 								   'proto' => 'tcp4'
 								  }),
 			 Net::Connection->new({
@@ -33,7 +33,7 @@ my @objects=(
 								   'local_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
-								   'state' => 'ESTABLISHED',
+								   'state' => 'TIME_WAIT',
 								   'proto' => 'tcp4'
 								  }),
 			 Net::Connection->new({
@@ -70,9 +70,9 @@ eval{
 };
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::state->sorter(@objects) resulted in... '.$@);
 
-ok( $sorted[0]->local_host eq '2.2.2.2', 'sort order 0') or die ('The first local host value was not 2.2.2.2');
-ok( $sorted[3]->local_host eq '6.6.6.6', 'sort order 1') or die ('The last local host value was not 6.6.6.6');
-ok( $sorted[2]->local_host eq '4.4.4.4', 'sort order 2') or die ('The middle local host value was not 4.4.4.4');
-ok( $sorted[1]->local_host eq '4.4.4.4', 'sort order 2') or die ('The middle local host value was not 4.4.4.4');
+ok( $sorted[0]->state =~ 'ESTABLISHED', 'sort order 0') or die ('The state for 0 is not ESTABLISHED');
+ok( $sorted[1]->state =~ 'FIN_WAIT_2', 'sort order 1') or die ('The state for 1 is not FIN_WAIT_2');
+ok( $sorted[2]->state =~ 'LISTEN', 'sort order 2') or die ('The state for 2 is not LISTEN');
+ok( $sorted[3]->state =~ 'TIME_WAIT', 'sort order 2') or die ('The state for 3 is not TIME_WAIT');
 
 done_testing(7);

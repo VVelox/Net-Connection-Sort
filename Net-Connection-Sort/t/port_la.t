@@ -9,8 +9,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
 								   'local_host' => '4.4.4.4',
-								   'foreign_port' => 'FTP',
-								   'local_port' => '11132',
+								   'local_port' => 'FTP',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -20,8 +20,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
 								   'local_host' => '2.2.2.2',
-								   'foreign_port' => 'HTTP',
-								   'local_port' => '11132',
+								   'local_port' => 'HTTP',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -31,8 +31,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
 								   'local_host' => '6.6.6.6',
-								   'foreign_port' => 'SSH',
-								   'local_port' => '11132',
+								   'local_port' => 'SSH',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -42,8 +42,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
 								   'local_host' => '4.4.4.4',
-								   'foreign_port' => 'HTTPS',
-								   'local_port' => '11132',
+								   'local_port' => 'HTTPS',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -74,9 +74,9 @@ eval{
 };
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::host_f->sorter(@objects) resulted in... '.$@);
 
-ok( $sorted[0]->foreign_port =~ 'FTP', 'sort order 0') or die ('The first foreign port value was not FTP');
-ok( $sorted[1]->foreign_port =~ 'HTTP', 'sort order 1') or die ('The last foreign port value was not HTTP');
-ok( $sorted[2]->foreign_port =~ 'HTTPS', 'sort order 2') or die ('The middle foreign port value was not HTTPS');
-ok( $sorted[3]->foreign_port =~ 'SSH' , 'sort order 2') or die ('The middle foreign port value was not SSH');
+ok( $sorted[0]->local_port =~ 'FTP', 'sort order 0') or die ('The first local port value was not FTP');
+ok( $sorted[1]->local_port =~ 'HTTP', 'sort order 1') or die ('The last local port value was not HTTP');
+ok( $sorted[2]->local_port =~ 'HTTPS', 'sort order 2') or die ('The middle local port value was not HTTPS');
+ok( $sorted[3]->local_port =~ 'SSH' , 'sort order 2') or die ('The middle local port value was not SSH');
 
 done_testing(7);

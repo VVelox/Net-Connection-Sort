@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::port_la - Sorts the connections via the foreign port alphabetically.
+Net::Connection::Sort::port_la - Sorts the connections via the local port alphabetically.
 
 =head1 VERSION
 
@@ -19,9 +19,9 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-This currently implements cmp sorting only. For numeric sorting using port_f.
+This currently implements cmp sorting only. For numeric sorting using port_l.
 
-    use Net::Connection::Sort::port_f;
+    use Net::Connection::Sort::port_la;
     use Net::Connection;
     use Data::Dumper;
     
@@ -29,8 +29,8 @@ This currently implements cmp sorting only. For numeric sorting using port_f.
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => 'FTP',
-                                        'local_port' => '11132',
+                                        'local_port' => 'FTP',
+                                        'foriegn_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -40,8 +40,8 @@ This currently implements cmp sorting only. For numeric sorting using port_f.
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
                                         'local_host' => '2.2.2.2',
-                                        'foreign_port' => 'SSH',
-                                        'local_port' => '11132',
+                                        'local_port' => 'SSH',
+                                        'foreign_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -51,8 +51,8 @@ This currently implements cmp sorting only. For numeric sorting using port_f.
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
                                         'local_host' => '6.6.6.6',
-                                        'foreign_port' => 'HTTP',
-                                        'local_port' => '11132',
+                                        'local_port' => 'HTTP',
+                                        'foreign_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -62,8 +62,8 @@ This currently implements cmp sorting only. For numeric sorting using port_f.
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => 'HTTPS',
-                                        'local_port' => '11132',
+                                        'local_port' => 'HTTPS',
+                                        'foreign_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -137,13 +137,15 @@ sub sorter{
 
 =head2 helper
 
+A internal helper function.
+
 =cut
 
 sub helper{
-	if ( !defined( $_[0]->foreign_port_name ) ){
-		return $_[0]->foreign_port;
+	if ( !defined( $_[0]->local_port_name ) ){
+		return $_[0]->local_port;
 	}
-	return $_[0]->foreign_port_name;
+	return $_[0]->local_port_name;
 }
 
 =head1 AUTHOR

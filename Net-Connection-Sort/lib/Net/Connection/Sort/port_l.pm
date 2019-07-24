@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::port_l - Sorts the connections via the foreign port numerically.
+Net::Connection::Sort::port_l - Sorts the connections via the local port numerically.
 
 =head1 VERSION
 
@@ -30,7 +30,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
                                         'foreign_port' => '23',
-                                        'local_port' => '11132',
+                                        'local_port' => '1133',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -52,7 +52,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                                         'foreign_host' => '5.5.5.5',
                                         'local_host' => '6.6.6.6',
                                         'foreign_port' => '80',
-                                        'local_port' => '11132',
+                                        'local_port' => '11131',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -63,7 +63,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
                                         'foreign_port' => '21',
-                                        'local_port' => '11132',
+                                        'local_port' => '11133',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
@@ -129,7 +129,7 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		$a->foreign_port <=> $b->foreign_port
+		$a->local_port <=> $b->local_port
 	} @objects;
 
 	return @objects;

@@ -9,8 +9,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
 								   'local_host' => '4.4.4.4',
-								   'foreign_port' => '1',
-								   'local_port' => '11132',
+								   'local_port' => '1',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -20,8 +20,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
 								   'local_host' => '2.2.2.2',
-								   'foreign_port' => '80',
-								   'local_port' => '11132',
+								   'local_port' => '80',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -31,8 +31,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
 								   'local_host' => '6.6.6.6',
-								   'foreign_port' => '22',
-								   'local_port' => '11132',
+								   'local_port' => '22',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -42,8 +42,8 @@ my @objects=(
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
 								   'local_host' => '4.4.4.4',
-								   'foreign_port' => '21',
-								   'local_port' => '11132',
+								   'local_port' => '21',
+								   'foreign_port' => '11132',
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
@@ -74,9 +74,9 @@ eval{
 };
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::host_f->sorter(@objects) resulted in... '.$@);
 
-ok( $sorted[0]->foreign_port eq '1', 'sort order 0') or die ('The first foreign port value was not 1');
-ok( $sorted[1]->foreign_port eq '21', 'sort order 1') or die ('The last foreign port value was not 21');
-ok( $sorted[2]->foreign_port eq '22', 'sort order 2') or die ('The middle foreign port value was not 22');
-ok( $sorted[3]->foreign_port eq '80' , 'sort order 2') or die ('The middle foreign port value was not 80');
+ok( $sorted[0]->local_port eq '1', 'sort order 0') or die ('The first local port value was not 1');
+ok( $sorted[1]->local_port eq '21', 'sort order 1') or die ('The last local port value was not 21');
+ok( $sorted[2]->local_port eq '22', 'sort order 2') or die ('The middle local port value was not 22');
+ok( $sorted[3]->local_port eq '80' , 'sort order 2') or die ('The middle local port value was not 80');
 
 done_testing(7);

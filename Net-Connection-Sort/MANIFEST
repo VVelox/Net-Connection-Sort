@@ -8,6 +8,8 @@ lib/Net/Connection/Sort/pid.pm
 lib/Net/Connection/Sort/proto.pm
 lib/Net/Connection/Sort/port_f.pm
 lib/Net/Connection/Sort/port_fa.pm
+lib/Net/Connection/Sort/port_l.pm
+lib/Net/Connection/Sort/port_la.pm
 lib/Net/Connection/Sort/ptr_f.pm
 lib/Net/Connection/Sort/ptr_l.pm
 lib/Net/Connection/Sort/state.pm
@@ -30,6 +32,8 @@ t/10-load.t
 t/11-load.t
 t/12-load.t
 t/13-load.t
+t/14-load.t
+t/15-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
@@ -41,6 +45,8 @@ t/pid.t
 t/proto.t
 t/port_f.t
 t/port_fa.t
+t/port_l.t
+t/port_la.t
 t/ptr_f.t
 t/ptr_l.t
 t/state.t

@@ -194,6 +194,10 @@ L<https://cpanratings.perl.org/d/Net-Connection-Sort>
 
 L<https://metacpan.org/release/Net-Connection-Sort>
 
+=item * Git Repo
+
+L<https://gitea.eesdp.org/vvelox/Net-Connection-Sort>
+
 =back
 
 

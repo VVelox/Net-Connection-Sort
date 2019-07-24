@@ -4,6 +4,7 @@ lib/Net/Connection/Sort/host_f.pm
 lib/Net/Connection/Sort/host_fl.pm
 lib/Net/Connection/Sort/host_l.pm
 lib/Net/Connection/Sort/host_lf.pm
+lib/Net/Connection/Sort/pid.pm
 lib/Net/Connection/Sort/proto.pm
 lib/Net/Connection/Sort/state.pm
 lib/Net/Connection/Sort/uid.pm
@@ -18,6 +19,7 @@ t/04-load.t
 t/05-load.t
 t/06-load.t
 t/07-load.t
+t/08-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
@@ -25,6 +27,7 @@ t/host_f.t
 t/host_fl.t
 t/host_l.t
 t/host_lf.t
+t/pid.t
 t/proto.t
 t/state.t
 t/uid.t

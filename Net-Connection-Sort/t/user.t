@@ -17,6 +17,8 @@ my @objects=(
 								   'proto' => 'tcp6',
 								   'uid' => 1000,
 								   'pid' => 2,
+								   'username' => 'toor',
+								   'uid_resolve' => 0,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
@@ -29,6 +31,8 @@ my @objects=(
 								   'proto' => 'udp4',
 								   'uid' => 33,
 								   'pid' => 0,
+								   'username' => 'root',
+								   'uid_resolve' => 0,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
@@ -41,6 +45,8 @@ my @objects=(
 								   'proto' => 'udp6',
 								   'uid' => 0,
 								   'pid' => 1,
+								   'username'=> 'foo',
+								   'uid_resolve' => 0,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
@@ -83,21 +89,21 @@ if( !defined( $sorted[0]->{pid} ) ||
    ){
 	$is_defined=0;
 }
-my $is_zero=0;
+my $is_foo=0;
 if( (
-	 defined( $sorted[0]->{pid} ) &&
-	 ( $sorted[0]->{pid} eq '0' )
+	 defined( $sorted[0]->username ) &&
+	 ( $sorted[0]->username eq '0' )
 	 ) || (
-		   defined( $sorted[1]->{pid} ) &&
-		   ( $sorted[1]->{pid} eq '0' )
+		   defined( $sorted[1]->username ) &&
+		   ( $sorted[1]->username =~ 'foo' )
 	 )
    ){
-	$is_zero=1;
+	$is_foo=1;
 }
 
-ok( $is_defined eq '0', 'sort order 0') or die ('The PID for 0/1 is not 0');
-ok( $is_zero eq '1', 'sort order 1') or die ('The PID for 0/1 is not 0');
-ok( $sorted[2]->{pid} eq '1', 'sort order 2') or die ('The PID for 2 is not 33');
-ok( $sorted[3]->{pid} eq '2', 'sort order 2') or die ('The PID for 3 is not 1000');
+ok( $is_defined eq '0', 'sort order 0') or die ('The username for 0/1 is not undef');
+ok( $is_foo eq '1', 'sort order 1') or die ('The username for 0/1 is not foo ');
+ok( $sorted[2]->username =~ 'root', 'sort order 2') or die ('The username for 2 is not 33');
+ok( $sorted[3]->username =~ 'toor', 'sort order 2') or die ('The username for 3 is not 1000');
 
 done_testing(7);

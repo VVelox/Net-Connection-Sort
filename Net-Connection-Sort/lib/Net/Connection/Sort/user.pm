@@ -1,4 +1,4 @@
-package Net::Connection::Sort::pid;
+package Net::Connection::Sort::user;
 
 use 5.006;
 use strict;
@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::pid - Sorts the connections via the PID.
+Net::Connection::Sort::user - Sorts the connections via the username
 
 =head1 VERSION
 
@@ -19,10 +19,10 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-Please keep in mind that PID is not a requirement and if not specified is set to 0,
+Please keep in mind that username is not a requirement and if not specified is set to 0,
 meaning it will show up earlier.
 
-    use Net::Connection::Sort::host_f;
+    use Net::Connection::Sort::user;
     use Net::Connection;
     use Data::Dumper;
     
@@ -38,6 +38,8 @@ meaning it will show up earlier.
                                         'proto' => 'tcp4',
                                         'uid' => 22,
                                         'pid' => 2,
+                                        'username' => 'toor',
+                                        'uid_resolve' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -50,6 +52,8 @@ meaning it will show up earlier.
                                         'proto' => 'tcp4',
                                         'uid' => 1000,
                                         'pid' => 0,
+                                        'username' => 'root',
+                                        'uid_resolve' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -62,8 +66,10 @@ meaning it will show up earlier.
                                         'proto' => 'tcp4',
                                         'uid' => 1,
                                         'pid' => 44,
+                                        'username' => 'foo',
+                                        'uid_resolve' => 0,
                                         }),
-    # as no PID is specified, the value of 0 will just be used instead
+    # as no username is specified, the value of 0 will just be used instead
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
@@ -76,7 +82,7 @@ meaning it will show up earlier.
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::uid->new;
+    my $sorter=$sorter=Net::Connection::Sort::user->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -132,10 +138,8 @@ sub sorter{
 		die 'The passed item is either not a array or undefined';
 	}
 
-	# whoops... just realized I forgot to create a method for this in Net::Connection... doing it this way foreign
-	# compatibility with Net::Connection 0.0.0 as of currently
 	@objects=sort  {
-		&helper( $a->{pid} ) <=>  &helper( $b->{pid} )
+		&helper( $a->username ) cmp  &helper( $b->username )
 	} @objects;
 
 	return @objects;
@@ -145,7 +149,7 @@ sub sorter{
 
 This is a internal function.
 
-If no PID is defined, returns 0.
+If no UID is defined, returns 0.
 
 =cut
 

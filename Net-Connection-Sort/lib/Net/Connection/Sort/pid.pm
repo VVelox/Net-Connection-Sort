@@ -1,4 +1,4 @@
-package Net::Connection::Sort::uid;
+package Net::Connection::Sort::pid;
 
 use 5.006;
 use strict;
@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::uid - Sorts the connections via the UID.
+Net::Connection::Sort::pid - Sorts the connections via the PID.
 
 =head1 VERSION
 
@@ -19,7 +19,7 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-Please keep in mind that UID is not a requirement and if not specified is set to 0,
+Please keep in mind that PID is not a requirement and if not specified is set to 0,
 meaning it will show up earlier.
 
     use Net::Connection::Sort::host_f;
@@ -35,8 +35,9 @@ meaning it will show up earlier.
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
-                                        'uid' => 33,
+                                        'proto' => 'tcp4',
+                                        'uid' => 22,
+                                        'pid' => 2,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -46,8 +47,9 @@ meaning it will show up earlier.
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
-                                        'uid' => 0,
+                                        'proto' => 'tcp4',
+                                        'uid' => 1000,
+                                        'pid' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -57,10 +59,11 @@ meaning it will show up earlier.
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
-                                        'uid' => 1000,
+                                        'proto' => 'tcp4',
+                                        'uid' => 1,
+                                        'pid' => 44,
                                         }),
-    # as no UID is specified, the value of 0 will just be used instead
+    # as no PID is specified, the value of 0 will just be used instead
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
@@ -69,7 +72,7 @@ meaning it will show up earlier.
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
                                         }),
                  );
     
@@ -130,7 +133,7 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->uid ) <=>  &helper( $b->uid )
+		&helper( $a->{pid} ) <=>  &helper( $b->{pid} )
 	} @objects;
 
 	return @objects;
@@ -140,7 +143,7 @@ sub sorter{
 
 This is a internal function.
 
-If no UID is defined, returns 0.
+If no PID is defined, returns 0.
 
 =cut
 

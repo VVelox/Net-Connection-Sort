@@ -132,6 +132,8 @@ sub sorter{
 		die 'The passed item is either not a array or undefined';
 	}
 
+	# whoops... just realized I forgot to create a method for this in Net::Connection... doing it this way foreign
+	# compatibility with Net::Connection 0.0.0 as of currently
 	@objects=sort  {
 		&helper( $a->{pid} ) <=>  &helper( $b->{pid} )
 	} @objects;

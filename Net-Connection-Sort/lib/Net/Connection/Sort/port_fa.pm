@@ -1,4 +1,4 @@
-package Net::Connection::Sort::port_f;
+package Net::Connection::Sort::port_fa;
 
 use 5.006;
 use strict;
@@ -6,7 +6,7 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::port_f - Sorts the connections via the foreign port numerically.
+Net::Connection::Sort::port_fa - Sorts the connections via the foreign port alphabetically.
 
 =head1 VERSION
 
@@ -19,7 +19,7 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-This currently implements numeric sorting only. For non-numeric sorting using port_fa.
+This currently implements cmp sorting only. For numeric sorting using port_f.
 
     use Net::Connection::Sort::port_f;
     use Net::Connection;
@@ -29,7 +29,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => '23',
+                                        'foreign_port' => 'FTP',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
@@ -40,7 +40,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
                                         'local_host' => '2.2.2.2',
-                                        'foreign_port' => '22',
+                                        'foreign_port' => 'SSH',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
@@ -51,7 +51,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
                                         'local_host' => '6.6.6.6',
-                                        'foreign_port' => '80',
+                                        'foreign_port' => 'HTTP',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
@@ -62,7 +62,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => '21',
+                                        'foreign_port' => 'HTTPS',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
@@ -72,7 +72,7 @@ This currently implements numeric sorting only. For non-numeric sorting using po
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::port_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::port_fa->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -86,7 +86,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::port_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::port_fa->new;
 
 =cut
 
@@ -129,10 +129,21 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		$a->foreign_port <=> $b->foreign_port
+		&helper( $a ) cmp &helper( $b )
 	} @objects;
 
 	return @objects;
+}
+
+=head2 helper
+
+=cut
+
+sub helper{
+	if ( !defined( $_[0]->foreign_port_name ) ){
+		return $_[0]->foreign_port;
+	}
+	return $_[0]->foreign_port_name;
 }
 
 =head1 AUTHOR

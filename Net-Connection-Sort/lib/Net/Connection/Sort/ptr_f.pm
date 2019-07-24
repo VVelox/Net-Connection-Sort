@@ -1,4 +1,4 @@
-package Net::Connection::Sort::host_f;
+package Net::Connection::Sort::ptr_f;
 
 use 5.006;
 use strict;
@@ -7,7 +7,7 @@ use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort::host_f - Sorts the connections via the foreign host.
+Net::Connection::Sort::ptr_f - Sorts via the foriegn PTR.
 
 =head1 VERSION
 
@@ -20,7 +20,9 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-    use Net::Connection::Sort::host_f;
+If a foriegn PTR could not be found or is not set, then the foreign host is used.
+
+    use Net::Connection::Sort::ptr_f;
     use Net::Connection;
     use Data::Dumper;
     
@@ -33,7 +35,9 @@ our $VERSION = '0.0.0';
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ptrs' => 0,
+                                        'foreign_ptr' => 'c.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -43,7 +47,9 @@ our $VERSION = '0.0.0';
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ptrs' => 0,
+                                        'foreign_ptr' => 'a.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -53,7 +59,9 @@ our $VERSION = '0.0.0';
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ptrs' => 0,
+                                        'foreign_ptr' => 'b.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
@@ -67,7 +75,7 @@ our $VERSION = '0.0.0';
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::ptr_f->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -81,7 +89,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::ptr_f->new;
 
 =cut
 
@@ -124,7 +132,7 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->foreign_host ) <=>  &helper( $b->foreign_host )
+		&helper( $a ) cmp  &helper( $b )
 	} @objects;
 
 	return @objects;
@@ -134,21 +142,17 @@ sub sorter{
 
 This is a internal function.
 
+If the foreign PTR is not defined, the foreign host is returned.
+
 =cut
 
 sub helper{
         if (
-			( !defined($_[0]) ) ||
-			( $_[0] eq '*' ) ||
-			( $_[0] =~ /[g-zG-Z]/ )
+			( !defined($_[0]->foreign_ptr ) )
 			){
-			return 0;
+			return $_[0]->foreign_host;
         }
-        my $host=eval { Net::IP->new( $_[0] )->intip} ;
-        if (!defined( $host )){
-			return 0;
-        }
-        return $host;
+        return $_[0]->foreign_ptr;
 }
 
 =head1 AUTHOR

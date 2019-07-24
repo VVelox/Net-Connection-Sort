@@ -19,6 +19,8 @@ my @objects=(
 								   'pid' => 2,
 								   'username' => 'toor',
 								   'uid_resolve' => 0,
+								   'ptrs' => 0,
+								   'foreign_ptr' => 'a.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
@@ -33,6 +35,8 @@ my @objects=(
 								   'pid' => 0,
 								   'username' => 'root',
 								   'uid_resolve' => 0,
+								   'ptrs' => 0,
+								   'foreign_ptr' => 'c.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
@@ -47,6 +51,8 @@ my @objects=(
 								   'pid' => 1,
 								   'username'=> 'foo',
 								   'uid_resolve' => 0,
+								   'ptrs' => 0,
+								   'foreign_ptr' => 'b.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
@@ -61,18 +67,18 @@ my @objects=(
 			 );
 
 BEGIN {
-    use_ok( 'Net::Connection::Sort::user' ) || print "Bail out!\n";
+    use_ok( 'Net::Connection::Sort::ptr_f' ) || print "Bail out!\n";
 }
 
-diag( "Testing Net::Connection::Sort::user $Net::Connection::Sort::user::VERSION, Perl $], $^X" );
+diag( "Testing Net::Connection::Sort::ptr_f $Net::Connection::Sort::ptr_f::VERSION, Perl $], $^X" );
 
 my $sorter;
 my $worked=0;
 eval{
-	$sorter=Net::Connection::Sort::user->new;
+	$sorter=Net::Connection::Sort::ptr_f->new;
 	$worked=1;
 };
-ok( $worked eq 1, 'sorter init') or die ('Net::Connection::Sort::user->new resulted in... '.$@);
+ok( $worked eq 1, 'sorter init') or die ('Net::Connection::Sort::ptr_f->new resulted in... '.$@);
 
 my @sorted;
 $worked=0;
@@ -82,28 +88,14 @@ eval{
 };
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::proto->sorter(@objects) resulted in... '.$@);
 
-# 0 and 1 can end up in any order, make sure they are as expected
 my $is_defined=1;
-if( !defined( $sorted[0]->{pid} ) ||
-	!defined( $sorted[1]->{pid} )
-   ){
+if ( !defined( $sorted[0]->foreign_ptr ) ){
 	$is_defined=0;
 }
-my $is_foo=0;
-if( (
-	 defined( $sorted[0]->username ) &&
-	 ( $sorted[0]->username eq '0' )
-	 ) || (
-		   defined( $sorted[1]->username ) &&
-		   ( $sorted[1]->username =~ 'foo' )
-	 )
-   ){
-	$is_foo=1;
-}
 
-ok( $is_defined eq '0', 'sort order 0') or die ('The username for 0/1 is not undef');
-ok( $is_foo eq '1', 'sort order 1') or die ('The username for 0/1 is not foo ');
-ok( $sorted[2]->username =~ 'root', 'sort order 2') or die ('The username for 2 is not 33');
-ok( $sorted[3]->username =~ 'toor', 'sort order 2') or die ('The username for 3 is not 1000');
+ok( $is_defined eq '0', 'sort order 0') or die ('The first ptr should be undef.');
+ok( $sorted[1]->foreign_ptr =~ 'a.foo', 'sort order 1') or die ('The ptr for 1 is not a.foo ');
+ok( $sorted[2]->foreign_ptr =~ 'b.foo', 'sort order 2') or die ('The ptr for 2 is not b.foo');
+ok( $sorted[3]->foreign_ptr =~ 'c.foo', 'sort order 2') or die ('The ptr for 3 is not c.foo');
 
 done_testing(7);

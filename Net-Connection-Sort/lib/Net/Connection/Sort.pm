@@ -3,7 +3,6 @@ package Net::Connection::Sort;
 use 5.006;
 use strict;
 use warnings;
-use base 'Error::Helper';
 
 =head1 NAME
 
@@ -122,14 +121,7 @@ sub new{
 
 
 	my $self = {
-				perror=>undef,
-				error=>undef,
-				errorString=>"",
 				testing=>0,
-				errorExtra=>{
-							 flags=>{
-									 }
-							 },
 				type=>'host_f',
 				invert=>0,
 				sorter=>undef,,

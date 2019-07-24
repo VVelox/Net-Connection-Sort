@@ -3,7 +3,6 @@ package Net::Connection::Sort::proto;
 use 5.006;
 use strict;
 use warnings;
-use Net::IP;
 
 =head1 NAME
 

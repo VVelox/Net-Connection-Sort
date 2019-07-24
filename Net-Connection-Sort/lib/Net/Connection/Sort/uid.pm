@@ -1,13 +1,12 @@
-package Net::Connection::Sort::host_f;
+package Net::Connection::Sort::uid;
 
 use 5.006;
 use strict;
 use warnings;
-use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort::host_f - Sorts the connections via the foreign host.
+Net::Connection::Sort::uid - Sorts the connections via the UID.
 
 =head1 VERSION
 
@@ -34,6 +33,7 @@ our $VERSION = '0.0.0';
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4'
+                                        'uid' => 33,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -44,6 +44,7 @@ our $VERSION = '0.0.0';
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4'
+                                        'uid' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -54,7 +55,9 @@ our $VERSION = '0.0.0';
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4'
+                                        'uid' => 1000,
                                         }),
+    # as no UID is specified, the value of 0 will just be used instead
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
@@ -67,7 +70,7 @@ our $VERSION = '0.0.0';
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::uid->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -81,7 +84,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::host_f->new;
+    my $sorter=$sorter=Net::Connection::Sort::uid->new;
 
 =cut
 
@@ -124,7 +127,7 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->foreign_host ) <=>  &helper( $b->foreign_host )
+		&helper( $a->uid ) <=>  &helper( $b->uid )
 	} @objects;
 
 	return @objects;
@@ -134,21 +137,15 @@ sub sorter{
 
 This is a internal function.
 
+If no UID is defined, returns 0.
+
 =cut
 
 sub helper{
-        if (
-			( !defined($_[0]) ) ||
-			( $_[0] eq '*' ) ||
-			( $_[0] =~ /[g-zG-Z]/ )
-			){
+        if ( !defined($_[0]) ){
 			return 0;
         }
-        my $host=eval { Net::IP->new( $_[0] )->intip} ;
-        if (!defined( $host )){
-			return 0;
-        }
-        return $host;
+        return $_[0];
 }
 
 =head1 AUTHOR

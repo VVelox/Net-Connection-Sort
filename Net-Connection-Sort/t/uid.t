@@ -14,7 +14,8 @@ my @objects=(
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'LISTEN',
-								   'proto' => 'tcp6'
+								   'proto' => 'tcp6',
+								   'uid' => 1000,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
@@ -24,7 +25,8 @@ my @objects=(
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'FIN_WAIT_2',
-								   'proto' => 'udp4'
+								   'proto' => 'udp4',
+								   'uid' => 33,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
@@ -34,7 +36,8 @@ my @objects=(
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'TIME_WAIT',
-								   'proto' => 'udp6'
+								   'proto' => 'udp6',
+								   'uid' => 0,
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
@@ -44,23 +47,23 @@ my @objects=(
 								   'sendq' => '1',
 								   'recvq' => '0',
 								   'state' => 'ESTABLISHED',
-								   'proto' => 'tcp4'
+								   'proto' => 'tcp4',
 								  }),
 			 );
 
 BEGIN {
-    use_ok( 'Net::Connection::Sort::proto' ) || print "Bail out!\n";
+    use_ok( 'Net::Connection::Sort::uid' ) || print "Bail out!\n";
 }
 
-diag( "Testing Net::Connection::Sort::proto $Net::Connection::Sort::proto::VERSION, Perl $], $^X" );
+diag( "Testing Net::Connection::Sort::uid $Net::Connection::Sort::uid::VERSION, Perl $], $^X" );
 
 my $sorter;
 my $worked=0;
 eval{
-	$sorter=Net::Connection::Sort::proto->new;
+	$sorter=Net::Connection::Sort::uid->new;
 	$worked=1;
 };
-ok( $worked eq 1, 'sorter init') or die ('Net::Connection::Sort::proto->new resulted in... '.$@);
+ok( $worked eq 1, 'sorter init') or die ('Net::Connection::Sort::uid->new resulted in... '.$@);
 
 my @sorted;
 $worked=0;
@@ -70,9 +73,28 @@ eval{
 };
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::proto->sorter(@objects) resulted in... '.$@);
 
-ok( $sorted[0]->proto =~ 'tcp4', 'sort order 0') or die ('The proto for 0 is not tcp4');
-ok( $sorted[1]->proto =~ 'tcp6', 'sort order 1') or die ('The proto for 1 is not tcp6');
-ok( $sorted[2]->proto =~ 'udp4', 'sort order 2') or die ('The proto for 2 is not udp4');
-ok( $sorted[3]->proto =~ 'udp6', 'sort order 2') or die ('The proto for 3 is not udp6');
+# 0 and 1 can end up in any order, make sure they are as expected
+my $is_defined=1;
+if( !defined( $sorted[0]->uid ) ||
+	!defined( $sorted[1]->uid )
+   ){
+	$is_defined=0;
+}
+my $is_zero=0;
+if( (
+	 defined( $sorted[0]->uid ) &&
+	 ( $sorted[0]->uid eq '0' )
+	 ) || (
+		   defined( $sorted[1]->uid ) &&
+		   ( $sorted[1]->uid eq '0' )
+	 )
+   ){
+	$is_zero=1;
+}
+
+ok( $is_defined eq '0', 'sort order 0') or die ('The UID for 0/1 is not 0');
+ok( $is_zero eq '1', 'sort order 1') or die ('The UID for 0/1 is not 0');
+ok( $sorted[2]->uid eq '33', 'sort order 2') or die ('The UID for 2 is not 33');
+ok( $sorted[3]->uid eq '1000', 'sort order 2') or die ('The UID for 3 is not 1000');
 
 done_testing(7);

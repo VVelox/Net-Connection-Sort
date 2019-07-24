@@ -7,7 +7,7 @@ use Net::IP;
 
 =head1 NAME
 
-Net::Connection::Sort::port_f - Sorts the connections via the foreign host.
+Net::Connection::Sort::port_f - Sorts the connections via the foreign port numerically.
 
 =head1 VERSION
 
@@ -20,6 +20,8 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
+This currently implements numeric sorting only. For non-numeric sorting using port_fa.
+
     use Net::Connection::Sort::port_f;
     use Net::Connection;
     use Data::Dumper;
@@ -28,12 +30,13 @@ our $VERSION = '0.0.0';
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => '22',
+                                        'foreign_port' => '23',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ports' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -43,27 +46,30 @@ our $VERSION = '0.0.0';
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ports' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
                                         'local_host' => '6.6.6.6',
-                                        'foreign_port' => '22',
+                                        'foreign_port' => '80',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ports' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
-                                        'foreign_port' => '22',
+                                        'foreign_port' => '21',
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
                                         'state' => 'ESTABLISHED',
-                                        'proto' => 'tcp4'
+                                        'proto' => 'tcp4',
+                                        'ports' => 0,
                                         }),
                  );
     
@@ -124,31 +130,10 @@ sub sorter{
 	}
 
 	@objects=sort  {
-		&helper( $a->foreign_host ) <=>  &helper( $b->foreign_host )
+		$a->foreign_port <=> $b->foreign_port
 	} @objects;
 
 	return @objects;
-}
-
-=head2 helper
-
-This is a internal function.
-
-=cut
-
-sub helper{
-        if (
-			( !defined($_[0]) ) ||
-			( $_[0] eq '*' ) ||
-			( $_[0] =~ /[g-zG-Z]/ )
-			){
-			return 0;
-        }
-        my $host=eval { Net::IP->new( $_[0] )->intip} ;
-        if (!defined( $host )){
-			return 0;
-        }
-        return $host;
 }
 
 =head1 AUTHOR

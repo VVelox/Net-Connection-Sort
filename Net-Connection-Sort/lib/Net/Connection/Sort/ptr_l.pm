@@ -20,7 +20,7 @@ our $VERSION = '0.0.0';
 
 =head1 SYNOPSIS
 
-If a foriegn PTR could not be found or is not set, then the foreign host is used.
+If a local PTR could not be found or is not set, then the foreign host is used.
 
     use Net::Connection::Sort::ptr_l;
     use Net::Connection;
@@ -37,7 +37,7 @@ If a foriegn PTR could not be found or is not set, then the foreign host is used
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4',
                                         'ptrs' => 0,
-                                        'foreign_ptr' => 'c.foo',
+                                        'local_ptr' => 'c.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -49,7 +49,7 @@ If a foriegn PTR could not be found or is not set, then the foreign host is used
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4',
                                         'ptrs' => 0,
-                                        'foreign_ptr' => 'a.foo',
+                                        'local_ptr' => 'a.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -61,7 +61,7 @@ If a foriegn PTR could not be found or is not set, then the foreign host is used
                                         'state' => 'ESTABLISHED',
                                         'proto' => 'tcp4',
                                         'ptrs' => 0,
-                                        'foreign_ptr' => 'b.foo',
+                                        'local_ptr' => 'b.foo',
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
@@ -142,17 +142,17 @@ sub sorter{
 
 This is a internal function.
 
-If the foreign PTR is not defined, the foreign host is returned.
+If the local PTR is not defined, the local host is returned.
 
 =cut
 
 sub helper{
         if (
-			( !defined($_[0]->foreign_ptr ) )
+			( !defined($_[0]->local_ptr ) )
 			){
-			return $_[0]->foreign_host;
+			return $_[0]->local_host;
         }
-        return $_[0]->foreign_ptr;
+        return $_[0]->local_ptr;
 }
 
 =head1 AUTHOR

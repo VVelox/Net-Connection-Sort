@@ -20,7 +20,7 @@ my @objects=(
 								   'username' => 'toor',
 								   'uid_resolve' => 0,
 								   'ptrs' => 0,
-								   'foreign_ptr' => 'a.foo',
+								   'local_ptr' => 'a.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '1.1.1.1',
@@ -36,7 +36,7 @@ my @objects=(
 								   'username' => 'root',
 								   'uid_resolve' => 0,
 								   'ptrs' => 0,
-								   'foreign_ptr' => 'c.foo',
+								   'local_ptr' => 'c.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '5.5.5.5',
@@ -52,7 +52,7 @@ my @objects=(
 								   'username'=> 'foo',
 								   'uid_resolve' => 0,
 								   'ptrs' => 0,
-								   'foreign_ptr' => 'b.foo',
+								   'local_ptr' => 'b.foo',
 								  }),
 			 Net::Connection->new({
 								   'foreign_host' => '3.3.3.3',
@@ -89,13 +89,13 @@ eval{
 ok( $worked eq 1, 'sort') or die ('Net::Connection::Sort::proto->sorter(@objects) resulted in... '.$@);
 
 my $is_defined=1;
-if ( !defined( $sorted[0]->foreign_ptr ) ){
+if ( !defined( $sorted[0]->local_ptr ) ){
 	$is_defined=0;
 }
 
 ok( $is_defined eq '0', 'sort order 0') or die ('The first ptr should be undef.');
-ok( $sorted[1]->foreign_ptr =~ 'a.foo', 'sort order 1') or die ('The ptr for 1 is not a.foo ');
-ok( $sorted[2]->foreign_ptr =~ 'b.foo', 'sort order 2') or die ('The ptr for 2 is not b.foo');
-ok( $sorted[3]->foreign_ptr =~ 'c.foo', 'sort order 2') or die ('The ptr for 3 is not c.foo');
+ok( $sorted[1]->local_ptr =~ 'a.foo', 'sort order 1') or die ('The ptr for 1 is not a.foo ');
+ok( $sorted[2]->local_ptr =~ 'b.foo', 'sort order 2') or die ('The ptr for 2 is not b.foo');
+ok( $sorted[3]->local_ptr =~ 'c.foo', 'sort order 2') or die ('The ptr for 3 is not c.foo');
 
 done_testing(7);

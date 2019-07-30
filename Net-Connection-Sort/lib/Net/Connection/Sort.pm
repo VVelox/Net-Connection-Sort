@@ -10,11 +10,11 @@ Net::Connection::Sort - Sorts array of Net::Connection objects.
 
 =head1 VERSION
 
-Version 0.0.0
+Version 0.0.1
 
 =cut
 
-our $VERSION = '0.0.0';
+our $VERSION = '0.0.1';
 
 
 =head1 SYNOPSIS
@@ -167,10 +167,6 @@ sub sorter{
 	if(defined($_[1])){
 		@objects= @{$_[1]};
 	};
-
-	if( ! $self->errorblank ){
-		return undef;
-	}
 
 	return $self->{sorter}->sorter( \@objects );
 }

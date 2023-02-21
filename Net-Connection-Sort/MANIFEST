@@ -5,6 +5,7 @@ lib/Net/Connection/Sort/host_fl.pm
 lib/Net/Connection/Sort/host_l.pm
 lib/Net/Connection/Sort/host_lf.pm
 lib/Net/Connection/Sort/pid.pm
+lib/Net/Connection/Sort/none.pm
 lib/Net/Connection/Sort/proto.pm
 lib/Net/Connection/Sort/port_f.pm
 lib/Net/Connection/Sort/port_fa.pm

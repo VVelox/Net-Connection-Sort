@@ -1,4 +1,4 @@
-package Net::Connection::Sort::none;
+package Net::Connection::Sort::unsorted;
 
 use 5.006;
 use strict;
@@ -6,20 +6,20 @@ use warnings;
 
 =head1 NAME
 
-Net::Connection::Sort::none - Returns what is passed to it.
+Net::Connection::Sort::unsorted - Pass though. Does returns exactly what it was given.
 
 =head1 VERSION
 
-Version 0.0.0
+Version 0.0.1
 
 =cut
 
-our $VERSION = '0.0.0';
+our $VERSION = '0.0.1';
 
 
 =head1 SYNOPSIS
 
-    use Net::Connection::Sort::none;
+    use Net::Connection::Sort::unsorted;
     use Net::Connection;
     use Data::Dumper;
     
@@ -31,9 +31,8 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'LISTEN',
                                         'proto' => 'tcp4'
-                                        'uid' => 33,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '1.1.1.1',
@@ -42,9 +41,8 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'FIN_WAIT_2',
                                         'proto' => 'tcp4'
-                                        'uid' => 0,
                                         }),
                   Net::Connection->new({
                                         'foreign_host' => '5.5.5.5',
@@ -53,11 +51,9 @@ our $VERSION = '0.0.0';
                                         'local_port' => '11132',
                                         'sendq' => '1',
                                         'recvq' => '0',
-                                        'state' => 'ESTABLISHED',
+                                        'state' => 'TIME_WAIT',
                                         'proto' => 'tcp4'
-                                        'uid' => 1000,
                                         }),
-    # as no UID is specified, the value of 0 will just be used instead
                   Net::Connection->new({
                                         'foreign_host' => '3.3.3.3',
                                         'local_host' => '4.4.4.4',
@@ -70,7 +66,7 @@ our $VERSION = '0.0.0';
                                         }),
                  );
     
-    my $sorter=$sorter=Net::Connection::Sort::none->new;
+    my $sorter=$sorter=Net::Connection::Sort::unsorted->new;
     
     @objects=$sorter->sorter( \@objects );
     
@@ -84,7 +80,7 @@ This initiates the module.
 
 No arguments are taken and this will always succeed.
 
-    my $sorter=$sorter=Net::Connection::Sort::uid->new;
+    my $sorter=$sorter=Net::Connection::Sort::state->new;
 
 =cut
 
@@ -156,14 +152,6 @@ You can also look for information at:
 =item * RT: CPAN's request tracker (report bugs here)
 
 L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Connection-Sort>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Net-Connection-Sort>
-
-=item * CPAN Ratings
-
-L<https://cpanratings.perl.org/d/Net-Connection-Sort>
 
 =item * Search CPAN
 
